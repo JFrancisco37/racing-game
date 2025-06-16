@@ -252,7 +252,7 @@ int main(int argc, char* argv[])
     // Criamos uma janela do sistema operacional, com 800 colunas e 600 linhas
     // de pixels, e com título "INF01047 ...".
     GLFWwindow* window;
-    window = glfwCreateWindow(800, 600, "INF01047 - 00275634 - João Francisco Hirtenkauf Munhoz", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "Car Racing", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
 
         // Abaixo definimos as varáveis que efetivamente definem a câmera virtual.
         // Veja slides 195-227 e 229-234 do documento Aula_08_Sistemas_de_Coordenadas.pdf.
-        glm::vec4 camera_position_c  = car_position - 10.0f *car_direction + glm::vec4(0.0f,1.0f,0.0f,0.0f); // Ponto "c", centro da câmera
+        glm::vec4 camera_position_c  = car_position - 5.0f *car_direction + glm::vec4(0.0f,1.0f,0.0f,0.0f); // Ponto "c", centro da câmera
         glm::vec4 camera_lookat_l    = glm::vec4(0.0f,0.0f,0.0f,1.0f); // Ponto "l", para onde a câmera (look-at) estará sempre olhando
         glm::vec4 camera_view_vector = car_position - camera_position_c; // Vetor "view", sentido para onde a câmera está virada
         glm::vec4 camera_up_vector   = glm::vec4(0.0f,1.0f,0.0f,0.0f); // Vetor "up" fixado para apontar para o "céu" (eito Y global)
@@ -413,26 +413,26 @@ int main(int argc, char* argv[])
 
         delta_t = (float)glfwGetTime() - old_seconds;
 
-        if (front) {
-            glm::vec4 w = car_direction;
-            w = w / norm(w);
-            car_position +=  (w+car_steer) * 0.2f * delta_t;
-        }
-
-        if (back) {
-            glm::vec4 w = car_direction;
-            w = w / norm(w);
-            car_position -=  (w+car_steer) * 0.2f * delta_t;
-        }
-
         if (left) {
             glm::vec4 u = crossproduct(camera_up_vector, car_direction);
             car_steer = u / norm(u);
-        }
-
-        if (right) {
+        }else if (right) {
             glm::vec4 u = crossproduct(camera_up_vector, -car_direction);
             car_steer = u / norm(u);
+        }else{
+            car_steer = glm::vec4(0.0f,0.0f,0.0f,0.0f);
+        }
+
+        if (front) {
+            car_direction += 0.2f*car_steer;
+            car_direction = car_direction / norm(car_direction);
+            car_position +=  car_direction * 0.02f * delta_t;
+        }
+
+        if (back) {
+            car_direction -= 0.2f*car_steer;
+            car_direction = car_direction / norm(car_direction);
+            car_position -=  car_direction * 0.02f * delta_t;
         }
 
 
@@ -450,9 +450,9 @@ int main(int argc, char* argv[])
               * Matrix_Rotate_X(g_AngleX);
         glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, BUNNY);
-        //DrawVirtualObject("the_bunny");
+        DrawVirtualObject("the_bunny");
 
-        model = Matrix_Scale(2.5, 1.0, 2.5)
+        model = Matrix_Scale(1000.0f,1.0f,1000.0f)
             * Matrix_Translate(0.0f, -1.0f, 0.0f)
             * Matrix_Rotate_Z(g_AngleZ)
             * Matrix_Rotate_Y(g_AngleY)
