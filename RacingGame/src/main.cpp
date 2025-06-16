@@ -48,7 +48,7 @@
 
 bool front = false;
 bool back = false;
-glm::vec3 car_position = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec4 car_position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 // Estrutura que representa um modelo geométrico carregado a partir de um
 // arquivo ".obj". Veja https://en.wikipedia.org/wiki/Wavefront_.obj_file .
@@ -411,13 +411,13 @@ int main(int argc, char* argv[])
         if (front) {
             glm::vec4 w = camera_view_vector;
             w = w / norm(w);
-            car_position +=  glm::vec3(w) * 0.2f * delta_t;
+            car_position +=  w * 0.2f * delta_t;
         }
 
         if (back) {
             glm::vec4 w = camera_view_vector;
             w = w / norm(w);
-            car_position -=  glm::vec3(w) * 0.2f * delta_t;
+            car_position -=  w * 0.2f * delta_t;
         }
 
 
