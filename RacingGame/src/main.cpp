@@ -297,7 +297,7 @@ int main(int argc, char* argv[])
     LoadShadersFromFiles();
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
-    ObjModel spheremodel("../../data/car.obj");
+    ObjModel spheremodel("../../data/car/7LGJ3BYGGGCNZG8ESB4RJZJS0.obj");
     ComputeNormals(&spheremodel);
     BuildTrianglesAndAddToVirtualScene(&spheremodel);
 
@@ -438,10 +438,11 @@ int main(int argc, char* argv[])
 
 
         // Desenhamos o modelo da esfera
-        model = Matrix_Translate(car_position.x, car_position.y, car_position.z);
+        model = Matrix_Translate(car_position.x, car_position.y, car_position.z)
+              * Matrix_Rotate_Y(g_AngleY);
         glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, SPHERE);
-        DrawVirtualObject("the_sphere");
+        DrawVirtualObject("the_car");
 
         // Desenhamos o modelo do coelho
         model = Matrix_Translate(1.0f,0.0f,0.0f)
