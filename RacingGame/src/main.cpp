@@ -46,6 +46,10 @@
 #include "utils.h"
 #include "matrices.h"
 
+bool front = false;
+bool back = false;
+glm::vec3 car_position = glm::vec3(0.0f, 0.0f, 0.0f);
+
 // Estrutura que representa um modelo geométrico carregado a partir de um
 // arquivo ".obj". Veja https://en.wikipedia.org/wiki/Wavefront_.obj_file .
 struct ObjModel
@@ -317,6 +321,9 @@ int main(int argc, char* argv[])
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
 
+    float old_seconds = (float)glfwGetTime();
+    float delta_t;
+
     // Ficamos em um loop infinito, renderizando, até que o usuário feche a janela
     while (!glfwWindowShouldClose(window))
     {
@@ -399,8 +406,23 @@ int main(int argc, char* argv[])
         #define BUNNY  1
         #define PLANE  2
 
+        delta_t = (float)glfwGetTime() - old_seconds;
+
+        if (front) {
+            glm::vec4 w = camera_view_vector;
+            w = w / norm(w);
+            car_position +=  glm::vec3(w) * 0.2f * delta_t;
+        }
+
+        if (back) {
+            glm::vec4 w = camera_view_vector;
+            w = w / norm(w);
+            car_position -=  glm::vec3(w) * 0.2f * delta_t;
+        }
+
+
         // Desenhamos o modelo da esfera
-        model = Matrix_Translate(-1.0f,0.0f,0.0f);
+        model = Matrix_Translate(car_position.x, car_position.y, car_position.z);
         glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, SPHERE);
         DrawVirtualObject("the_sphere");
@@ -412,7 +434,7 @@ int main(int argc, char* argv[])
               * Matrix_Rotate_X(g_AngleX);
         glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, BUNNY);
-        DrawVirtualObject("the_bunny");
+        //DrawVirtualObject("the_bunny");
 
         model = Matrix_Scale(2.5, 1.0, 2.5)
             * Matrix_Translate(0.0f, -1.0f, 0.0f)
@@ -1066,6 +1088,28 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
     // Se o usuário pressionar a tecla ESC, fechamos a janela.
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+
+    if (key == GLFW_KEY_W) {
+        if (action == GLFW_PRESS) {
+            // W pressionado
+            front = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            // W solto (câmera deve parar de se movimentar)
+            front = false;
+        }
+    }
+
+    if (key == GLFW_KEY_S) {
+        if (action == GLFW_PRESS) {
+            // S pressionado
+            back = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            // S solto (câmera deve parar de se movimentar)
+            back = false;
+        }
+    }
 
     // O código abaixo implementa a seguinte lógica:
     //   Se apertar tecla X       então g_AngleX += delta;

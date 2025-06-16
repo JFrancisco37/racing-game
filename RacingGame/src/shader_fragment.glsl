@@ -21,7 +21,6 @@ uniform int object_id;
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
 out vec4 color;
 
-
 void main()
 {
     // Obtemos a posição da câmera utilizando a inversa da matriz que define o
@@ -41,8 +40,7 @@ void main()
     vec4 n = normalize(normal);
 
     // Vetor que define o sentido da fonte de luz em relação ao ponto atual.
-    vec4 light_source = vec4(0.0, 2.0, 1.0, 1.0);
-    vec4 l = normalize(light_source - p);
+    vec4 l = normalize(camera_position - p);
 
     // Vetor que define o sentido da câmera em relação ao ponto atual.
     vec4 v = normalize(camera_position - p);
@@ -120,18 +118,9 @@ void main()
     // Alpha default = 1 = 100% opaco = 0% transparente
     color.a = 1;
 
-    vec4 light_direction = vec4(0.0, -1.0, 0.0, 0.0);
-    float angulo_abertura = 3.141592 /6.0;
-    if(dot(normalize(p - light_source), normalize(light_direction)) < cos(angulo_abertura))
-    {
-        color.rgb = ambient_term;
-    }
-    else
-    {
-        color.rgb = lambert_diffuse_term + ambient_term + phong_specular_term;
-    }
     // Cor final do fragmento calculada com uma combinação dos termos difuso,
     // especular, e ambiente. Veja slide 129 do documento Aula_17_e_18_Modelos_de_Iluminacao.pdf.
+    color.rgb = lambert_diffuse_term + ambient_term + phong_specular_term;
 
     // Cor final com correção gamma, considerando monitor sRGB.
     // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
