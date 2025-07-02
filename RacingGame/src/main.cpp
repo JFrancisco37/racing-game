@@ -45,6 +45,7 @@
 // Headers locais, definidos na pasta "include/"
 #include "utils.h"
 #include "matrices.h"
+#include "Car.hpp"
 
 bool front = false;
 bool back = false;
@@ -585,8 +586,7 @@ void PopMatrix(glm::mat4& M)
 
 // Função que computa as normais de um ObjModel, caso elas não tenham sido
 // especificadas dentro do arquivo ".obj"
-void ComputeNormals(ObjModel* model)
-{
+void ComputeNormals(ObjModel* model){
     if ( !model->attrib.normals.empty() )
         return;
 
@@ -1350,8 +1350,7 @@ void TextRendering_ShowFramesPerSecond(GLFWwindow* window)
 // Função para debugging: imprime no terminal todas informações de um modelo
 // geométrico carregado de um arquivo ".obj".
 // Veja: https://github.com/syoyo/tinyobjloader/blob/22883def8db9ef1f3ffb9b404318e7dd25fdbb51/loader_example.cc#L98
-void PrintObjModelInfo(ObjModel* model)
-{
+void PrintObjModelInfo(ObjModel* model){
   const tinyobj::attrib_t                & attrib    = model->attrib;
   const std::vector<tinyobj::shape_t>    & shapes    = model->shapes;
   const std::vector<tinyobj::material_t> & materials = model->materials;
