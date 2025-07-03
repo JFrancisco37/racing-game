@@ -350,8 +350,8 @@ void Car::update(float deltaTime) {
     }
     if (speed < 0.01f && v_long == 0.0f && netWheelTorque > 0.0f) {
          // Allow wheel spin from standstill but cap it to avoid infinite acceleration
-        wheelAngularVelocity = std::min(wheelAngularVelocity, (engineMaxRPM / 60.0f) * (2.0f * M_PI) / (gearRatios[0] * differentialRatio));
-    }
+        wheelAngularVelocity = std::min(wheelAngularVelocity, static_cast<float>((engineMaxRPM / 60.0f) * (2.0f * M_PI) / (gearRatios[0] * differentialRatio))
+); }
 
 
     // --- 6. Integrate Linear and Angular Motion ---

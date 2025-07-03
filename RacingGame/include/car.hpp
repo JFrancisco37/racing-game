@@ -91,7 +91,7 @@ public:
     void setupDefaultCorvetteParameters();
     float lookupTorque(float rpm);
 
-private:
+public:
     // Helper function to get the car's heading vector from its yaw angle
     glm::vec4 getCarHeading() const;
     // Helper function to get the car's side vector from its yaw angle
