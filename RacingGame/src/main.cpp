@@ -45,7 +45,7 @@
 // Headers locais, definidos na pasta "include/"
 #include "utils.h"
 #include "matrices.h"
-#include "Car.hpp"
+#include "car.hpp"
 
 bool front = false;
 bool back = false;
