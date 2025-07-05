@@ -5,8 +5,6 @@
 //    INF01047 Fundamentos de Computação Gráfica
 //               Prof. Eduardo Gastal
 //
-//                   LABORATÓRIO 4
-//
 
 // Arquivos "headers" padrões de C podem ser incluídos em um
 // programa C++, sendo necessário somente adicionar o caractere
@@ -301,6 +299,7 @@ int main(int argc, char* argv[])
     ObjModel spheremodel("../../data/car/7LGJ3BYGGGCNZG8ESB4RJZJS0.obj");
     ComputeNormals(&spheremodel);
     BuildTrianglesAndAddToVirtualScene(&spheremodel);
+    PrintObjModelInfo(&spheremodel);
 
     ObjModel bunnymodel("../../data/bunny.obj");
     ComputeNormals(&bunnymodel);
