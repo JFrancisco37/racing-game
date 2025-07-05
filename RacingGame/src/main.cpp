@@ -296,10 +296,10 @@ int main(int argc, char* argv[])
     LoadShadersFromFiles();
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
-    ObjModel spheremodel("../../data/car/7LGJ3BYGGGCNZG8ESB4RJZJS0.obj");
-    ComputeNormals(&spheremodel);
-    BuildTrianglesAndAddToVirtualScene(&spheremodel);
-    PrintObjModelInfo(&spheremodel);
+    ObjModel carmodel("../../data/car/7LGJ3BYGGGCNZG8ESB4RJZJS0.obj");
+    ComputeNormals(&carmodel);
+    BuildTrianglesAndAddToVirtualScene(&carmodel);
+    //PrintObjModelInfo(&carmodel);
 
     ObjModel bunnymodel("../../data/bunny.obj");
     ComputeNormals(&bunnymodel);
@@ -410,6 +410,7 @@ int main(int argc, char* argv[])
         #define SPHERE 0
         #define BUNNY  1
         #define PLANE  2
+        #define CAR 3
 
         delta_t = (float)glfwGetTime() - old_seconds;
 
@@ -441,8 +442,10 @@ int main(int argc, char* argv[])
         model = Matrix_Translate(car_position.x, car_position.y, car_position.z)
               * Matrix_Rotate_Y(g_AngleY);
         glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
-        glUniform1i(g_object_id_uniform, SPHERE);
-        DrawVirtualObject("the_car");
+        glUniform1i(g_object_id_uniform, CAR);
+        for (size_t shape = 0; shape < carmodel.shapes.size(); ++shape){
+            DrawVirtualObject(carmodel.shapes[shape].name.c_str());
+        }
 
         // Desenhamos o modelo do coelho
         model = Matrix_Translate(1.0f,0.0f,0.0f)
