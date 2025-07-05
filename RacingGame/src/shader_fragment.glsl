@@ -6,11 +6,13 @@
 // "shader_vertex.glsl" e "main.cpp".
 in vec4 position_world;
 in vec4 normal;
+in vec2 texcoords;
 
 // Matrizes computadas no código C++ e enviadas para a GPU
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform sampler2D texture_diffuse;
 
 // Identificador que define qual objeto está sendo desenhado no momento
 #define SPHERE 0
@@ -96,7 +98,8 @@ void main()
     vec3 Ia = vec3(0.2,0.2,0.2); // PREENCHA AQUI OK o espectro da luz ambiente
 
     // Termo difuso utilizando a lei dos cossenos de Lambert
-    vec3 lambert_diffuse_term = Kd * I * max(dot(n, l), 0.0); // PREENCHA AQUI OK o termo difuso de Lambert
+    vec3 texcolor = texture(texture_diffuse, texcoords).rgb;
+    vec3 lambert_diffuse_term = texcolor * I * max(dot(n, l), 0.0); // PREENCHA AQUI OK o termo difuso de Lambert
 
     // Termo ambiente
     vec3 ambient_term = Ka * Ia; // PREENCHA AQUI OK o termo ambiente
@@ -125,5 +128,7 @@ void main()
     // Cor final com correção gamma, considerando monitor sRGB.
     // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
     color.rgb = pow(color.rgb, vec3(1.0,1.0,1.0)/2.2);
+
+    
 } 
 
